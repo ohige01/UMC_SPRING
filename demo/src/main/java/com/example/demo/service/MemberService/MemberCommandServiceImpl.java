@@ -10,7 +10,6 @@ import com.example.demo.domain.mapping.MemberPrefer;
 import com.example.demo.repository.FoodCategoryRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.web.dto.MemberRequestDTO;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,11 @@ public class MemberCommandServiceImpl implements MemberCommandService{
 
     private final FoodCategoryRepository foodCategoryRepository;
 
-    //@Override
+    @Override
+    public Member getMember(Long memberId) {
+        return memberRepository.findById(memberId).get();
+    }
+    @Override
     @Transactional
     public Member joinMember(MemberRequestDTO.JoinDto request) {
 
