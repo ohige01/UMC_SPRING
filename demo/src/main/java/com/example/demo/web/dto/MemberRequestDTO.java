@@ -29,4 +29,11 @@ public class MemberRequestDTO {
         @ExistCategories
         List<Long> preferCategory;
     }
+    @Getter
+    public static class MemMissionDto{
+        @NotNull
+        Long userId;
+        @NotNull
+        Long missionId;
+    }
 }

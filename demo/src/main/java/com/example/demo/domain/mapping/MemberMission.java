@@ -6,6 +6,7 @@ import com.example.demo.domain.common.BaseEntity;
 import com.example.demo.domain.enums.MissionStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -19,6 +20,7 @@ public class MemberMission extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("CHALLENGING")
     private MissionStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)

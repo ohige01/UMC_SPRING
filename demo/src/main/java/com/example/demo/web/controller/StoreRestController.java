@@ -23,13 +23,13 @@ public class StoreRestController {
     private final RegionCommandService regionCommandService;
     private final MemberCommandService memberCommandService;
     @PostMapping("/register")
-    public ApiResponse<StoreResponseDTO.JoinResultDTO> join(@RequestBody @Valid StoreRequestDTO.JoinDto request){
+    public ApiResponse<StoreResponseDTO.JoinResultDTO> register(@RequestBody @Valid StoreRequestDTO.JoinDto request){
         Region region = regionCommandService.getRegion(request.getRegionId());
         Store store = storeCommandService.joinStore(request, region);
         return ApiResponse.onSuccess(StoreConverter.toJoinResultDTO(store));
     }
     @PostMapping("/review")
-    public ApiResponse<StoreResponseDTO.WriteResultDTO> join(@RequestBody @Valid StoreRequestDTO.ReviewDto request){
+    public ApiResponse<StoreResponseDTO.WriteResultDTO> review(@RequestBody @Valid StoreRequestDTO.ReviewDto request){
         Store store = storeCommandService.getStore(request.getStoreId());
         Member member = memberCommandService.getMember(request.getMemberId());
         Review review = storeCommandService.writeReview(request, store, member);
