@@ -2,19 +2,21 @@ package com.example.demo.web.controller;
 
 import com.example.demo.apiPayload.ApiResponse;
 import com.example.demo.converter.MemberConverter;
+import com.example.demo.converter.StoreConverter;
 import com.example.demo.domain.Member;
 import com.example.demo.domain.Mission;
+import com.example.demo.domain.Review;
 import com.example.demo.domain.mapping.MemberMission;
 import com.example.demo.service.MemberService.MemberCommandService;
+import com.example.demo.service.MemberService.MemberQueryService;
 import com.example.demo.service.MissionService.MissionCommandService;
 import com.example.demo.web.dto.MemberRequestDTO;
 import com.example.demo.web.dto.MemberResponseDTO;
+import com.example.demo.web.dto.StoreResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class MemberRestController {
 
     private final MemberCommandService memberCommandService;
     private final MissionCommandService missionCommandService;
+    private final MemberQueryService memberQueryService;
     @PostMapping("/join")
     public ApiResponse<MemberResponseDTO.JoinResultDTO> join(@RequestBody @Valid MemberRequestDTO.JoinDto request){
         Member member = memberCommandService.joinMember(request);
@@ -35,5 +38,11 @@ public class MemberRestController {
         Mission mission = missionCommandService.getMission(request.getMissionId());
         MemberMission memberMission = memberCommandService.memberMission(request, member, mission);
         return ApiResponse.onSuccess(MemberConverter.toMemMissionResultDTO(memberMission));
+    }
+
+    @GetMapping("/{memberId}/reviews")
+    public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(@PathVariable(name = "memberId") Long memberId, @RequestParam(name = "page") Integer page){
+        Page<Review> reviews = memberQueryService.getReviewList(memberId, page);
+        return ApiResponse.onSuccess(StoreConverter.reviewPreViewListDTO(reviews));
     }
 }

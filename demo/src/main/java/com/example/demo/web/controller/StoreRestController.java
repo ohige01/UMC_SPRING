@@ -10,6 +10,7 @@ import com.example.demo.service.MemberService.MemberCommandService;
 import com.example.demo.service.RegionService.RegionCommandService;
 import com.example.demo.service.StoreService.StoreCommandService;
 import com.example.demo.service.StoreService.StoreQueryService;
+import com.example.demo.validation.annotation.ExistStore;
 import com.example.demo.web.dto.StoreRequestDTO;
 import com.example.demo.web.dto.StoreResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -55,8 +57,8 @@ public class StoreRestController {
             @Parameter(name = "storeId", description = "가게의 아이디, path variable 입니다!"),
             @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다."),
     })
-    public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(@PathVariable(name = "storeId") Long storeId, @RequestParam(name = "page") Integer page){
-        storeQueryService.getReviewList(storeId,page);
-        return null;
+    public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistStore @PathVariable(name = "storeId") Long storeId, @RequestParam(name = "page") Integer page){
+        Page<Review> reviews = storeQueryService.getReviewList(storeId,page);
+        return ApiResponse.onSuccess(StoreConverter.reviewPreViewListDTO(reviews));
     }
 }
