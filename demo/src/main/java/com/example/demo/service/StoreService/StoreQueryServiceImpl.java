@@ -1,7 +1,9 @@
 package com.example.demo.service.StoreService;
 
+import com.example.demo.domain.Mission;
 import com.example.demo.domain.Review;
 import com.example.demo.domain.Store;
+import com.example.demo.repository.MissionRepository;
 import com.example.demo.repository.ReviewRepository;
 import com.example.demo.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ import java.util.Optional;
 public class StoreQueryServiceImpl implements StoreQueryService{
 
     private final StoreRepository storeRepository;
-
+    private final MissionRepository missionRepository;
     private final ReviewRepository reviewRepository;
 
     @Override
@@ -28,6 +30,14 @@ public class StoreQueryServiceImpl implements StoreQueryService{
 
         Page<Review> StorePage = reviewRepository.findAllByStore(store, PageRequest.of(page, 10));
         return StorePage;
+    }
+    @Override
+    public Page<Mission> getMissionList(Long StoreId, Integer page) {
+
+        Store store = storeRepository.findById(StoreId).get();
+
+        Page<Mission> MissionPage = missionRepository.findAllByStore(store, PageRequest.of(page, 10));
+        return MissionPage;
     }
     @Override
     public Optional<Store> findStore(Long id) {

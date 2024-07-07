@@ -2,13 +2,18 @@ package com.example.demo.converter;
 
 import com.example.demo.domain.Member;
 import com.example.demo.domain.Mission;
+import com.example.demo.domain.Review;
 import com.example.demo.domain.enums.Gender;
 import com.example.demo.domain.mapping.MemberMission;
 import com.example.demo.web.dto.MemberRequestDTO;
 import com.example.demo.web.dto.MemberResponseDTO;
+import com.example.demo.web.dto.StoreResponseDTO;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MemberConverter {
 
@@ -54,6 +59,28 @@ public class MemberConverter {
         return MemberMission.builder()
                 .member(member)
                 .mission(mission)
+                .build();
+    }
+    public static StoreResponseDTO.ReviewPreViewDTO reviewPreViewDTO(Review review){
+        return StoreResponseDTO.ReviewPreViewDTO.builder()
+                .ownerNickname(review.getStore().getName())
+                .score(review.getScore())
+                .createdAt(review.getCreatedAt().toLocalDate())
+                .body(review.getTitle())
+                .build();
+    }
+    public static StoreResponseDTO.ReviewPreViewListDTO reviewPreViewListDTO(Page<Review> reviewList){
+
+        List<StoreResponseDTO.ReviewPreViewDTO> reviewPreViewDTOList = reviewList.stream()
+                .map(MemberConverter::reviewPreViewDTO).collect(Collectors.toList());
+
+        return StoreResponseDTO.ReviewPreViewListDTO.builder()
+                .isLast(reviewList.isLast())
+                .isFirst(reviewList.isFirst())
+                .totalPage(reviewList.getTotalPages())
+                .totalElements(reviewList.getTotalElements())
+                .listSize(reviewPreViewDTOList.size())
+                .reviewList(reviewPreViewDTOList)
                 .build();
     }
 }

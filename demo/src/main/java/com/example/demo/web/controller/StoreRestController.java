@@ -2,10 +2,7 @@ package com.example.demo.web.controller;
 
 import com.example.demo.apiPayload.ApiResponse;
 import com.example.demo.converter.StoreConverter;
-import com.example.demo.domain.Member;
-import com.example.demo.domain.Region;
-import com.example.demo.domain.Review;
-import com.example.demo.domain.Store;
+import com.example.demo.domain.*;
 import com.example.demo.service.MemberService.MemberCommandService;
 import com.example.demo.service.RegionService.RegionCommandService;
 import com.example.demo.service.StoreService.StoreCommandService;
@@ -33,12 +30,14 @@ public class StoreRestController {
     private final MemberCommandService memberCommandService;
     private final StoreQueryService storeQueryService;
     @PostMapping("/register")
-    public ApiResponse<StoreResponseDTO.JoinResultDTO> register(@RequestBody @Valid StoreRequestDTO.JoinDto request){
+    @Operation(summary = "가게 등록 API")
+    public ApiResponse<StoreResponseDTO.JoinResultDTO> register(@RequestBody @Valid StoreRequestDTO.JoinStoreDto request){
         Region region = regionCommandService.getRegion(request.getRegionId());
         Store store = storeCommandService.joinStore(request, region);
         return ApiResponse.onSuccess(StoreConverter.toJoinResultDTO(store));
     }
     @PostMapping("/review")
+    @Operation(summary = "특정 가게의 리뷰 작성 API")
     public ApiResponse<StoreResponseDTO.WriteResultDTO> review(@RequestBody @Valid StoreRequestDTO.ReviewDto request){
         Store store = storeCommandService.getStore(request.getStoreId());
         Member member = memberCommandService.getMember(request.getMemberId());
@@ -60,5 +59,11 @@ public class StoreRestController {
     public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistStore @PathVariable(name = "storeId") Long storeId, @RequestParam(name = "page") Integer page){
         Page<Review> reviews = storeQueryService.getReviewList(storeId,page);
         return ApiResponse.onSuccess(StoreConverter.reviewPreViewListDTO(reviews));
+    }
+    @GetMapping("/{storeId}/missions")
+    @Operation(summary = "특정 가게의 미션 목록 조회 API")
+    public ApiResponse<StoreResponseDTO.MissionPreViewListDTO> getMissionList(@ExistStore @PathVariable(name = "storeId") Long storeId, @RequestParam(name = "page") Integer page){
+        Page<Mission> missions = storeQueryService.getMissionList(storeId, page);
+        return ApiResponse.onSuccess(StoreConverter.missionPreViewListDTO(missions));
     }
 }

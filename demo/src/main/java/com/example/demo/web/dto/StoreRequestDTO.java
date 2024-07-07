@@ -7,7 +7,7 @@ import lombok.Getter;
 
 public class StoreRequestDTO {
     @Getter
-    public static class JoinDto{
+    public static class JoinStoreDto{
         @NotBlank
         String name;
         @NotNull

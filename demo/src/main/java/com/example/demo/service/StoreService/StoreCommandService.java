@@ -8,6 +8,6 @@ import com.example.demo.web.dto.StoreRequestDTO;
 
 public interface StoreCommandService {
     Store getStore(Long storeId);
-    Store joinStore(StoreRequestDTO.JoinDto request, Region region);
+    Store joinStore(StoreRequestDTO.JoinStoreDto request, Region region);
     Review writeReview(StoreRequestDTO.ReviewDto request, Store store, Member member);
 }
