@@ -6,8 +6,6 @@ import com.example.demo.converter.MemberConverter;
 import com.example.demo.converter.MemberPreferConverter;
 import com.example.demo.domain.FoodCategory;
 import com.example.demo.domain.Member;
-import com.example.demo.domain.Mission;
-import com.example.demo.domain.mapping.MemberMission;
 import com.example.demo.domain.mapping.MemberPrefer;
 import com.example.demo.repository.FoodCategoryRepository;
 import com.example.demo.repository.MemMissionRepository;
@@ -47,11 +45,5 @@ public class MemberCommandServiceImpl implements MemberCommandService{
         memberPreferList.forEach(memberPrefer -> {memberPrefer.setMember(newMember);});
 
         return memberRepository.save(newMember);
-    }
-    @Override
-    @Transactional
-    public MemberMission memberMission(MemberRequestDTO.MemMissionDto request, Member member, Mission mission){
-        MemberMission newMission = MemberConverter.toMemMission(member, mission);
-        return memMissionRepository.save(newMission);
     }
 }

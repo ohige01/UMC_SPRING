@@ -1,6 +1,7 @@
 package com.example.demo.converter;
 
 import com.example.demo.domain.*;
+import com.example.demo.web.dto.MissionResponseDTO;
 import com.example.demo.web.dto.StoreRequestDTO;
 import com.example.demo.web.dto.StoreResponseDTO;
 import org.springframework.data.domain.Page;
@@ -61,19 +62,19 @@ public class StoreConverter {
                 .build();
     }
 
-    public static StoreResponseDTO.MissionPreViewDTO missionPreViewDTO(Mission mission){
-        return StoreResponseDTO.MissionPreViewDTO.builder()
+    public static MissionResponseDTO.MissionPreViewDTO missionPreViewDTO(Mission mission){
+        return MissionResponseDTO.MissionPreViewDTO.builder()
                 .ownerNickname(mission.getStore().getName())
                 .reward(mission.getReward())
                 .body(mission.getMissionSpec())
                 .build();
     }
-    public static StoreResponseDTO.MissionPreViewListDTO missionPreViewListDTO(Page<Mission> missionList){
+    public static MissionResponseDTO.MissionPreViewListDTO missionPreViewListDTO(Page<Mission> missionList){
 
-        List<StoreResponseDTO.MissionPreViewDTO> missionPreViewDTOList = missionList.stream()
+        List<MissionResponseDTO.MissionPreViewDTO> missionPreViewDTOList = missionList.stream()
                 .map(StoreConverter::missionPreViewDTO).collect(Collectors.toList());
 
-        return StoreResponseDTO.MissionPreViewListDTO.builder()
+        return MissionResponseDTO.MissionPreViewListDTO.builder()
                 .isLast(missionList.isLast())
                 .isFirst(missionList.isFirst())
                 .totalPage(missionList.getTotalPages())

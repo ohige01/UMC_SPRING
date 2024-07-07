@@ -7,7 +7,9 @@ import com.example.demo.service.MemberService.MemberCommandService;
 import com.example.demo.service.RegionService.RegionCommandService;
 import com.example.demo.service.StoreService.StoreCommandService;
 import com.example.demo.service.StoreService.StoreQueryService;
+import com.example.demo.validation.annotation.ExistPage;
 import com.example.demo.validation.annotation.ExistStore;
+import com.example.demo.web.dto.MissionResponseDTO;
 import com.example.demo.web.dto.StoreRequestDTO;
 import com.example.demo.web.dto.StoreResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,15 +56,19 @@ public class StoreRestController {
     })
     @Parameters({
             @Parameter(name = "storeId", description = "가게의 아이디, path variable 입니다!"),
-            @Parameter(name = "page", description = "페이지 번호, 0번이 1 페이지 입니다."),
+            @Parameter(name = "page", description = "페이지 번호, 1번이 1 페이지 입니다."),
     })
-    public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistStore @PathVariable(name = "storeId") Long storeId, @RequestParam(name = "page") Integer page){
+    public ApiResponse<StoreResponseDTO.ReviewPreViewListDTO> getReviewList(@ExistStore @PathVariable(name = "storeId") Long storeId, @ExistPage @RequestParam(name = "page") Integer page){
         Page<Review> reviews = storeQueryService.getReviewList(storeId,page);
         return ApiResponse.onSuccess(StoreConverter.reviewPreViewListDTO(reviews));
     }
     @GetMapping("/{storeId}/missions")
     @Operation(summary = "특정 가게의 미션 목록 조회 API")
-    public ApiResponse<StoreResponseDTO.MissionPreViewListDTO> getMissionList(@ExistStore @PathVariable(name = "storeId") Long storeId, @RequestParam(name = "page") Integer page){
+    @Parameters({
+            @Parameter(name = "storeId", description = "가게의 아이디, path variable 입니다!"),
+            @Parameter(name = "page", description = "페이지 번호, 1번이 1 페이지 입니다."),
+    })
+    public ApiResponse<MissionResponseDTO.MissionPreViewListDTO> getMissionList(@ExistStore @PathVariable(name = "storeId") Long storeId, @ExistPage @RequestParam(name = "page") Integer page){
         Page<Mission> missions = storeQueryService.getMissionList(storeId, page);
         return ApiResponse.onSuccess(StoreConverter.missionPreViewListDTO(missions));
     }

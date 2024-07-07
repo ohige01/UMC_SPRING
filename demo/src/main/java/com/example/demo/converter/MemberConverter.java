@@ -7,6 +7,7 @@ import com.example.demo.domain.enums.Gender;
 import com.example.demo.domain.mapping.MemberMission;
 import com.example.demo.web.dto.MemberRequestDTO;
 import com.example.demo.web.dto.MemberResponseDTO;
+import com.example.demo.web.dto.MissionResponseDTO;
 import com.example.demo.web.dto.StoreResponseDTO;
 import org.springframework.data.domain.Page;
 
@@ -81,6 +82,28 @@ public class MemberConverter {
                 .totalElements(reviewList.getTotalElements())
                 .listSize(reviewPreViewDTOList.size())
                 .reviewList(reviewPreViewDTOList)
+                .build();
+    }
+
+    public static MissionResponseDTO.MissionPreViewDTO missionPreViewDTO(MemberMission mission){
+        return MissionResponseDTO.MissionPreViewDTO.builder()
+                .ownerNickname(mission.getMission().getStore().getName())
+                .reward(mission.getMission().getReward())
+                .body(mission.getMission().getMissionSpec())
+                .build();
+    }
+    public static MissionResponseDTO.MissionPreViewListDTO missionPreViewListDTO(Page<MemberMission> missionList){
+
+        List<MissionResponseDTO.MissionPreViewDTO> missionPreViewDTOList = missionList.stream()
+                .map(MemberConverter::missionPreViewDTO).collect(Collectors.toList());
+
+        return MissionResponseDTO.MissionPreViewListDTO.builder()
+                .isLast(missionList.isLast())
+                .isFirst(missionList.isFirst())
+                .totalPage(missionList.getTotalPages())
+                .totalElements(missionList.getTotalElements())
+                .listSize(missionPreViewDTOList.size())
+                .missionList(missionPreViewDTOList)
                 .build();
     }
 }
